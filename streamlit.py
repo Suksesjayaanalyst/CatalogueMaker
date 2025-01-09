@@ -27,9 +27,10 @@ if 'Foto' not in st.session_state:
 
 Foto, catalogue = st.session_state.foto, st.session_state.catalogue
 catalogue.rename(columns={'Item No.': 'ItemCode'}, inplace=True)
-Foto = Foto.loc[Foto.groupby('Upload Date')['Upload Date'].idxmax()]
+Foto = Foto.loc[Foto.groupby('ItemCode')['Upload Date'].idxmax()]
 makepdf = pd.merge(catalogue, Foto[['ItemCode', 'Link']], on='ItemCode', how='left')
 makepdf = makepdf[makepdf['Active'] == 'Y']
+
 
 st.title("Catalogue Maker - Sukses Jaya")
 st.divider()
