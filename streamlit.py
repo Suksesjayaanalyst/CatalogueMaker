@@ -40,22 +40,20 @@ makepdf = makepdf[['Kategori', 'Sub Item', 'ItemCode', 'Link', 'Item Description
 
 col1, col2, col3 = st.columns(3)
 kategori = col1.multiselect("Kategori", makepdf['Kategori'].unique())
-subitem = col2.multiselect("Sub Item", makepdf['Sub Item'].unique())
-itemcode = col3.multiselect("Item Code", makepdf['ItemCode'].unique())
-description = st.multiselect("Search by Description", makepdf['Item Description'].unique())
+filtered_makepdf = makepdf[makepdf['Kategori'].isin(kategori)] if kategori else makepdf
 
-if kategori:
-    makepdf = makepdf[makepdf['Kategori'].isin(kategori)]
-if subitem:
-    makepdf = makepdf[makepdf['Sub Item'].isin(subitem)]
-if itemcode:
-    makepdf = makepdf[makepdf['ItemCode'].isin(itemcode)]
-if description:
-    makepdf = makepdf[makepdf['Item Description'].isin(description)]
+subitem = col2.multiselect("Sub Item", filtered_makepdf['Sub Item'].unique())
+filtered_makepdf = filtered_makepdf[filtered_makepdf['Sub Item'].isin(subitem)] if subitem else filtered_makepdf
 
-total_rows = len(makepdf)
+itemcode = col3.multiselect("Item Code", filtered_makepdf['ItemCode'].unique())
+filtered_makepdf = filtered_makepdf[filtered_makepdf['ItemCode'].isin(itemcode)] if itemcode else filtered_makepdf
+
+description = st.multiselect("Search by Description", filtered_makepdf['Item Description'].unique())
+filtered_makepdf = filtered_makepdf[filtered_makepdf['Item Description'].isin(description)] if description else filtered_makepdf
+
+total_rows = len(filtered_makepdf)
 st.write(f"Total Rows: {total_rows}")
-st.dataframe(makepdf)
+st.dataframe(filtered_makepdf)
 
 if st.button("Start"):
     with st.spinner("Membuat File Excel..."):
@@ -63,7 +61,7 @@ if st.button("Start"):
         wb = Workbook()
         ws = wb.active
         ws.title = "Data Produk"
-        ws.append(makepdf.columns.tolist())
+        ws.append(filtered_makepdf.columns.tolist())
         ws.row_dimensions[1].height = 20
 
         for col in ws.columns:
@@ -71,7 +69,7 @@ if st.button("Start"):
 
         currency_style = NamedStyle(name="currency_style", number_format='"Rp" #,##0')
 
-        for i, row in enumerate(dataframe_to_rows(makepdf, index=False, header=False), start=2):
+        for i, row in enumerate(dataframe_to_rows(filtered_makepdf, index=False, header=False), start=2):
             ws.append(row[:3] + [None] + row[4:])
             ws.row_dimensions[i].height = 80
 
