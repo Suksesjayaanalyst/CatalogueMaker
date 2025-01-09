@@ -1,0 +1,7 @@
+pandas
+requests
+google-auth
+google-auth-oauthlib
+gspread
+openpyxl
+streamlit
