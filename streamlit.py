@@ -29,7 +29,7 @@ Foto, catalogue = st.session_state.foto, st.session_state.catalogue
 catalogue.rename(columns={'Item No.': 'ItemCode'}, inplace=True)
 Foto = Foto.loc[Foto.groupby('ItemCode')['Upload Date'].idxmax()]
 makepdf = pd.merge(catalogue, Foto[['ItemCode', 'Link']], on='ItemCode', how='left')
-makepdf = makepdf[makepdf['Active'] == 'Y']
+makepdf = makepdf[makepdf['validFor'] == 'Y']
 
 
 st.title("Catalogue Maker - Sukses Jaya")
