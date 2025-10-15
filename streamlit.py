@@ -36,20 +36,20 @@ st.title("Catalogue Maker - Sukses Jaya")
 st.divider()
 st.header("How to:")
 price = st.selectbox("Harga", ["Harga Under", "HargaLusin", "HargaKoli", "HargaSpecial"])
-makepdf = makepdf[['Kategori', 'Sub Item', 'ItemCode', 'Link', 'Item Description', 'IsiCtn', 'Uom', 'Gudang', price]]
+makepdf = makepdf[['U_Kategori', 'U_Sub_Item', 'ItemCode', 'Link', 'ItemName', 'IsiCtn', 'Uom', 'Gudang', price]]
 
 col1, col2, col3 = st.columns(3)
-kategori = col1.multiselect("Kategori", makepdf['Kategori'].unique())
-filtered_makepdf = makepdf[makepdf['Kategori'].isin(kategori)] if kategori else makepdf
+U_Kategori = col1.multiselect("U_Kategori", makepdf['U_Kategori'].unique())
+filtered_makepdf = makepdf[makepdf['U_Kategori'].isin(U_Kategori)] if U_Kategori else makepdf
 
-subitem = col2.multiselect("Sub Item", filtered_makepdf['Sub Item'].unique())
-filtered_makepdf = filtered_makepdf[filtered_makepdf['Sub Item'].isin(subitem)] if subitem else filtered_makepdf
+subitem = col2.multiselect("U_Sub_Item", filtered_makepdf['U_Sub_Item'].unique())
+filtered_makepdf = filtered_makepdf[filtered_makepdf['U_Sub_Item'].isin(subitem)] if subitem else filtered_makepdf
 
 itemcode = col3.multiselect("Item Code", filtered_makepdf['ItemCode'].unique())
 filtered_makepdf = filtered_makepdf[filtered_makepdf['ItemCode'].isin(itemcode)] if itemcode else filtered_makepdf
 
-description = st.multiselect("Search by Description", filtered_makepdf['Item Description'].unique())
-filtered_makepdf = filtered_makepdf[filtered_makepdf['Item Description'].isin(description)] if description else filtered_makepdf
+description = st.multiselect("Search by Description", filtered_makepdf['ItemName'].unique())
+filtered_makepdf = filtered_makepdf[filtered_makepdf['ItemName'].isin(description)] if description else filtered_makepdf
 
 total_rows = len(filtered_makepdf)
 st.write(f"Total Rows: {total_rows}")
